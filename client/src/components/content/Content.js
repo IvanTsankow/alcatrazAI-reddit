@@ -10,29 +10,24 @@ import CustomButton from '../button/CustomButton';
 import CustomTextField from '../textfield/CustomTextField';
 import Heading from '../heading/Heading';
 
-import { labels, threadCountProperties } from '../../common/constants';
+import { BASE_URL, labels, threadCountProperties } from '../../common/constants';
 import UserContext from '../../providers/UserContext';
 
 const Content = () => {
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
 
 
-    const [threads, setThreads] = useState([
-        {
-            id: "123",
-            name: "ALABALA",
-            comments_total: 159,
-            likes: 10,
-            dislikes: 10,
-            members: 10,
-        },
-    ]);
+    const [threads, setThreads] = useState([]);
     const [threadName, setThreadName] = useState("");
     const [disabled, setDisabled] = useState(true);
 
 
     useEffect(() => {
-        //fetch db for all r/
+        fetch(`${BASE_URL}/r`)
+          .then(response => response.json())
+          .then(setThreads)
+          .catch(error => console.log(error))
+
     }, []);
 
     const handleSubmitButton = () => {
@@ -48,16 +43,24 @@ const Content = () => {
         handleSubmitButton();
     }
 
-    const createNewThread = async (event) => {
+    const createNewThread = async () => {
         const newThread = {
             name: threadName,
-            admin: "", //user
             likes: 0,
-            comments: 0,
+            dislikes: 0,
+            comments_total: 0,
         };
         setThreads([...threads, newThread]);
 
-        // fetch().then();
+        fetch(`${BASE_URL}/r`, {
+            method: 'POST',
+            body: JSON.stringify(newThread),
+            headers: {
+                'Content-Type': 'application/json'
+            }})
+            .then()
+            .catch(error => console.log(error))
+      
     };
 
     return (
@@ -72,9 +75,9 @@ const Content = () => {
                         />
                     </TableHead>
                     <TableBody>
-                        {threads.map((thread) => (
+                        {threads.map((thread, i) => (
                             <ContentItem
-                                key={thread.id}
+                                key={i}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 component={"th"}
                                 scope={"row"}

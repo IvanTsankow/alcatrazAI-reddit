@@ -7,6 +7,7 @@ import CustomButton from '../button/CustomButton';
 import CustomTextField from '../textfield/CustomTextField';
 import Heading from '../heading/Heading';
 import UserContext from '../../providers/UserContext';
+import {BASE_URL} from './../../common/constants'
 
 const style = {
   position: 'absolute',
@@ -20,7 +21,7 @@ const style = {
   p: 4,
 };
 
-const Login = ({ open, handleClose, label }) => {
+const Login = ({ open, handleClose, label, setOpen }) => {
   
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -44,10 +45,37 @@ const Login = ({ open, handleClose, label }) => {
     handleSubmitButton();
   }
 
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
 
-  const submitForm = () => {
-    //fetch -> setUser(user);
+  const submitForm = (label) => {
+    const path = label === 'LOGIN'
+    ? "login"
+    : "signup";
+
+    const user = {
+      username,
+      password,
+    };
+
+    fetch(`${BASE_URL}/user/${path}`, {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+          'Content-Type': 'application/json'
+      }})
+      .then(r => {
+        if (r.status === 200 || r.status === 201) {
+          setUser(user.username);
+          setOpen(false);
+        }
+        else {
+          const error = path === 'login'
+          ? "User does not exist"
+          : "User already exists"
+          alert(error)
+        }
+      })
+      .catch(error => console.log(error))
   }
 
   return (
@@ -74,7 +102,7 @@ const Login = ({ open, handleClose, label }) => {
             onChange={handlePassword}
             helperText={"minimum 6 symbols"}
           />
-          <CustomButton variant={"outlined"} onClick={submitForm} label={label} disabled={disabled} />
+          <CustomButton variant={"outlined"} onClick={() => submitForm(label)} label={label} disabled={disabled} />
         </Box>
       </Modal>
     </div>

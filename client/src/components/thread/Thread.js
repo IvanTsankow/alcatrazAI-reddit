@@ -9,32 +9,20 @@ import ThreadItem from "./thread-item/ThreadItem";
 import CustomButton from '../button/CustomButton';
 import Heading from '../heading/Heading';
 import NotFound from "./../not-found/NotFound";
+import { BASE_URL } from '../../common/constants';
 
-const Thread = ({ history }) => {
+const Thread = ({ history, match }) => {
 
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
-  const [thread, setThread] = useState({
-    name: "NEW THREAD",
-    comments: [
-      {
-        user: "az",
-        body: "comentiram",
-        likes: 0,
-        dislikes: 1
-      },
-      {
-        user: "ti",
-        body: "ala bala",
-        likes: 0,
-        dislikes: 0
-      }
-    ]
-  });
+  const [thread, setThread] = useState({});
 
   useEffect(() => {
-    // fetch match.params.id
-  }, []);
+    fetch(`${BASE_URL}/r/${match.params.id}`)
+          .then(response => response.json())
+          .then(setThread)
+          .catch(error => console.log(error))
+  }, [match]);
 
   const closeThread = () => {
     history.push("/home");
@@ -55,7 +43,7 @@ const Thread = ({ history }) => {
                   onClick={closeThread}
                   label={"CLOSE THREAD"}
                 />
-                <ThreadItem comments={thread.comments} />
+                <ThreadItem thread={thread} setThread={setThread} />
               </>}
             {user
             ? <Comment thread={thread} setThread={setThread} />

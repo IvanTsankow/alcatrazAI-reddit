@@ -55,7 +55,7 @@ const Navbar = () => {
           }
         </Toolbar>
       </AppBar>
-      <Login handleClose={handleClose} open={open} label={label} />
+      <Login handleClose={handleClose} open={open} label={label} setOpen={setOpen} />
     </Box>
   );
 }

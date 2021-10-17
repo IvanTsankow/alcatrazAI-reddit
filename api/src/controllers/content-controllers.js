@@ -42,7 +42,10 @@ const updateThread = async (ctx) => {
 
 const updateComment = async (ctx) => {
     const commentId = ctx.params.commentId;
-    const { body, statusCode } = await updateCommentById(commentId);
+    const update = ctx.request.body;
+    const { body, statusCode } = await updateCommentById(commentId, update);
+    ctx.body = body;
+    ctx.status = statusCode;
 }
 
 module.exports = {

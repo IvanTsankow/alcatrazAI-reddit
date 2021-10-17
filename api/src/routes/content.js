@@ -15,8 +15,8 @@ const router = new Router({
     router
         .get('/:id', getThread)
         .get('/', listContent)
-        .post('/:id', postComment)
-        .put('/:id/:commentId', updateComment)
+        .post('/:id/comments', postComment)
+        .put('/:id/comments/:commentId', updateComment)
         .put('/:id', updateThread)
         .post('/', createThread)
 

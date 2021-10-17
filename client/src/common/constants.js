@@ -13,3 +13,4 @@ export const threadCountProperties = [
     "members",
 ];
 
+export const BASE_URL = "http://localhost:4000";

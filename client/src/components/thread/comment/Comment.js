@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import CustomTextField from "../../textfield/CustomTextField";
 import CustomButton from "../../button/CustomButton";
+import UserContext from "../../../providers/UserContext";
+import { BASE_URL } from "../../../common/constants";
 
 const Comment = ({thread, setThread}) => {
+
+    const {user} = useContext(UserContext);
 
     const [comment, setComment] = useState("");
 
@@ -22,12 +26,24 @@ const Comment = ({thread, setThread}) => {
     };
 
 
-    const submitComment = ({target}) => {
+    const submitComment = () => {
         const newComment = {
-            user: "", //user,
+            author: user,
             body: comment,
             likes: 0,
+            dislikes: 0,
+            thread_id: thread._id
         };
+
+        fetch(`${BASE_URL}/r/${thread._id}/comments`, {
+            method: 'POST',
+            body: JSON.stringify(newComment),
+            headers: {
+                'Content-Type': 'application/json'
+            }})
+            .catch(error => console.log(error))
+
+
         
         setThread({...thread, comments: [...thread.comments, newComment]})
     };

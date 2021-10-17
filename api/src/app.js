@@ -3,19 +3,15 @@ const json = require('koa-json');
 const router = require('./routes/index');
 const db = require('./db/db');
 const bodyParser = require('koa-bodyparser');
+const cors = require('@koa/cors')
 
 app = new Koa();
 
-// app.use(err);
 app
+  .use(cors())
   .use(json())
   .use(bodyParser())
-  .use(router());
-
-
-// app.listen(4000, () => {
-//     console.log("Server listens on port 4000")
-// });
+  .use(router())
 
 exports.start = async () => {
     try {

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { hashPassword } = require('./../helpers/hash-password');
+const hashPassword = require('./../helpers/hash-password');
 
 const UserSchema = new Schema({
     username: { type: String, required: true, index: { unique: true } },
@@ -10,13 +10,12 @@ const UserSchema = new Schema({
 UserSchema.pre('save', async function (next) {
     try {
         const user = this;
-
         if (!user.isModified('password')) return next();
 
         user.password = await hashPassword(user.password);
         next();
     } catch (error) {
-        next(err);
+        next(error);
     }
 });
 

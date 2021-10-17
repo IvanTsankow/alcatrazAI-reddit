@@ -18,7 +18,7 @@ const ContentItem = ({
 }) => {
 
     const openPage = () => {
-        history.push(`/r/${data.id}`);
+        history.push(`/r/${data._id}`);
     };
 
     return (
