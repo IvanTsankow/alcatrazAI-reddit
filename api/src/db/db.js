@@ -1,7 +1,8 @@
-//mongodb+srv://admin:<password>@cluster0.w7qgo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-
 const mongoose = require('mongoose');
+const {MONGO_DB_USERNAME, MONGO_DB_PASSWORD} = require('./../../env.dev');
 
 exports.start = async () => {
-   await mongoose.connect('//mongodb+srv://admin:TiHd5u2Sfy*spFt@cluster0.w7qgo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
+   await mongoose.connect(`mongodb+srv://${MONGO_DB_USERNAME}:${MONGO_DB_PASSWORD}@cluster0.cmjkt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+
+   `);
 }
